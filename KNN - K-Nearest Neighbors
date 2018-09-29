@@ -5,24 +5,24 @@
 
 #define DEBUG 0
 
-/*Esta struct armazena os 4 dados de medidas que ser„o usados para classificar as espÈcies de flores na forma de floats,
-  alÈm do nome j· classificado da espÈcie, na forma de uma string*/
+/*Esta struct armazena os 4 dados de medidas que ser√£o usados para classificar as esp√©cies de flores na forma de floats,
+  al√©m do nome j√° classificado da esp√©cie, na forma de uma string*/
 typedef struct flower{
-    double sl; /*Comprimento da sÈpala*/
-    double sw; /*Largura da sÈpala*/
-    double pl; /*Comprimento da pÈtala*/
-    double pw; /*Largura da pÈtala*/
-    char species[100]; /*Nome da espÈcie*/
-    char guess[100]; /*Chute da espÈcie dado pelo programa*/
+    double sl; /*Comprimento da s√©pala*/
+    double sw; /*Largura da s√©pala*/
+    double pl; /*Comprimento da p√©tala*/
+    double pw; /*Largura da p√©tala*/
+    char species[100]; /*Nome da esp√©cie*/
+    char guess[100]; /*Chute da esp√©cie dado pelo programa*/
 }flower;
 
 typedef struct sdist{
-    double d; /*Dist‚ncia calculada da flor do teste para alguma flor do treino*/
-    char s[100]; /*Nome da espÈcie*/
+    double d; /*Dist√¢ncia calculada da flor do teste para alguma flor do treino*/
+    char s[100]; /*Nome da esp√©cie*/
 }sdist;
 
-/*Esta funÁ„o È respons·vel por ler o arquivo de treino ou teste e contabilizar a quantidade de flores contidas nesses dados, com base na quantidade de linhas existentes.
-  A funÁ„o retorna um inteiro n que representa essa quantidade de flores e recebe como par‚metro o ponteiro do arquivo, bem como o nome deste, criado e lido na funÁ„o main*/
+/*Esta fun√ß√£o √© respons√°vel por ler o arquivo de treino ou teste e contabilizar a quantidade de flores contidas nesses dados, com base na quantidade de linhas existentes.
+  A fun√ß√£o retorna um inteiro n que representa essa quantidade de flores e recebe como par√¢metro o ponteiro do arquivo, bem como o nome deste, criado e lido na fun√ß√£o main*/
 int count_flowers(FILE *file){
 
     int n = 0;
@@ -34,10 +34,10 @@ int count_flowers(FILE *file){
  return (n-1); /*desconsiderando a primeira linha do arquivo*/
 }
 
-/*A funÁ„o a seguir rebobina o arquivo j· aberto pela funÁ„o que contabiliza as flores com o intuito de, j· se sabendo o n˙mero n de flores, armazenar
-  em um vetor de structs do tipo 'flor' as informaÁıes contidas no arquivo sobre cada exemplar de flor (comprimento e largura das pÈtalas e sÈpalas,
-  alÈm do nome da espÈcie).
-  A funÁ„o n„o retorna nada pois efetua alteraÁıes em vetores j· existentes por meio de ponteiro, e recebe como par‚metros este ponteiro, o ponteiro do
+/*A fun√ß√£o a seguir rebobina o arquivo j√° aberto pela fun√ß√£o que contabiliza as flores com o intuito de, j√° se sabendo o n√∫mero n de flores, armazenar
+  em um vetor de structs do tipo 'flor' as informa√ß√µes contidas no arquivo sobre cada exemplar de flor (comprimento e largura das p√©talas e s√©palas,
+  al√©m do nome da esp√©cie).
+  A fun√ß√£o n√£o retorna nada pois efetua altera√ß√µes em vetores j√° existentes por meio de ponteiro, e recebe como par√¢metros este ponteiro, o ponteiro do
   arquivo e a quantidade n de flores no arquivo atual, seja o de treino ou o de teste*/
 void read_informations(FILE *file, int n, flower* array){
 
@@ -55,8 +55,8 @@ void read_informations(FILE *file, int n, flower* array){
  free (headline);
 }
 
-/*Aqui usamos o algoritmo de insertion sort para ordenar o vetor de dist‚ncias posteriormente.
-  A funÁ„o n„o apresenta retorno e recebe como par‚metros o vetor a ser ordenado e o tamanho n de elementos contidos nele*/
+/*Aqui usamos o algoritmo de insertion sort para ordenar o vetor de dist√¢ncias posteriormente.
+  A fun√ß√£o n√£o apresenta retorno e recebe como par√¢metros o vetor a ser ordenado e o tamanho n de elementos contidos nele*/
 void insertion_sort(sdist* array, int n){
 
     sdist aux;
@@ -74,11 +74,11 @@ void insertion_sort(sdist* array, int n){
     }
 }
 
-/*Esta funÁ„o È chamada na main nteste vezes, e para cada vez calcula a distancia euclidiana entre um dos elementos do teste com todos os elementos
-  do treino. Em seguida, ordena as dist‚ncias e, dentre as k menores, determina qual È a espÈcia predominante, e com base nessa decis„o,
-  determina o chute a ser dado. Ao fim, imprime-se o chute e a classificaÁ„o correta. A funÁ„o È do tipo void e recebe como par‚metros
-  o vetor do treino, o vetor do teste, a quantidade de elementos em cada, o inteiro k, o contador de qual elemento do teste est· sendo
-  avaliado, o vetor de structs auxiliar que armazena as dist‚ncias e nomes correspondentes e o contador de acertos do programa.*/
+/*Esta fun√ß√£o √© chamada na main nteste vezes, e para cada vez calcula a distancia euclidiana entre um dos elementos do teste com todos os elementos
+  do treino. Em seguida, ordena as dist√¢ncias e, dentre as k menores, determina qual √© a esp√©cia predominante, e com base nessa decis√£o,
+  determina o chute a ser dado. Ao fim, imprime-se o chute e a classifica√ß√£o correta. A fun√ß√£o √© do tipo void e recebe como par√¢metros
+  o vetor do treino, o vetor do teste, a quantidade de elementos em cada, o inteiro k, o contador de qual elemento do teste est√° sendo
+  avaliado, o vetor de structs auxiliar que armazena as dist√¢ncias e nomes correspondentes e o contador de acertos do programa.*/
 void calculate_distances(flower* trainarray, flower* testarray, int ntrain, int ntest, int k, int counter, sdist* distances, int* rightguesses){
 
     int virginicac, versicolorc, setosac;
@@ -136,7 +136,7 @@ int main(int argc, char* argv[]){
     train = fopen(trainname, "r");
     int ntrain = count_flowers(train);
 
-        if(k < 1 || k > ntrain){      /*Aqui tratamos os casos em que k È inv·lido, e/ou n„o È coerente com os dados do arquivo de treino*/
+        if(k < 1 || k > ntrain){      /*Aqui tratamos os casos em que k √© inv√°lido, e/ou n√£o √© coerente com os dados do arquivo de treino*/
         printf("k is invalid\n");
         return 0;
         }
@@ -159,7 +159,7 @@ int main(int argc, char* argv[]){
         calculate_distances(trainarray, testarray, ntrain, ntest, k, counter, distances, &rightguesses);
     }
     double accuracy = (double) rightguesses / (double) ntest;
-    printf("%.4lf\n", accuracy); /*Aqui imprimimos a acur·cia calculada pela raz„o entre acertos e chutes dados*/
+    printf("%.4lf\n", accuracy); /*Aqui imprimimos a acur√°cia calculada pela raz√£o entre acertos e chutes dados*/
 
     free(trainarray);
     free(testarray);
