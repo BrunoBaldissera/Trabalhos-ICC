@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct{  // struct respons·vel por guardar os coeficientes racionais de cada equaÁ„o
+typedef struct{  // struct respons√°vel por guardar os coeficientes racionais de cada equa√ß√£o
     int num;     // da matriz na forma de um numerador inteiro e um denominador inteiro
     int den;
 }Coef;
 
-void imprimematriz(Coef** eqmat, int neq, int ncoef) // esta funÁ„o percorre os elementos da matriz e imprime-os formatados
-                                                     //com a divis„o do numerador pelo denominador representada por uma barra, exceto quando o n˙mero pode ser simplificado.
+void imprimematriz(Coef** eqmat, int neq, int ncoef) // esta fun√ß√£o percorre os elementos da matriz e imprime-os formatados
+                                                     //com a divis√£o do numerador pelo denominador representada por uma barra, exceto quando o n√∫mero pode ser simplificado.
 {
 	for (int i = 0; i < neq; i++)
 		{
@@ -27,8 +27,8 @@ void imprimematriz(Coef** eqmat, int neq, int ncoef) // esta funÁ„o percorre os 
 		}
 }
 
-Coef** scaneq(Coef** matcoef, int neq, int ncoef) // esta funÁ„o recebe a matriz alocada dinamicamente e, conforme lÍ os objetos a serem analisados,
-{  	                                              // atribui valores fornecidos pelo usu·rio nas posiÁıes corretas para cada coeficiente de cada equaÁ„o
+Coef** scaneq(Coef** matcoef, int neq, int ncoef) // esta fun√ß√£o recebe a matriz alocada dinamicamente e, conforme l√™ os objetos a serem analisados,
+{  	                                              // atribui valores fornecidos pelo usu√°rio nas posi√ß√µes corretas para cada coeficiente de cada equa√ß√£o
    char obj1;
    scanf(" %c", &obj1);
 
@@ -113,7 +113,7 @@ Coef** scaneq(Coef** matcoef, int neq, int ncoef) // esta funÁ„o recebe a matriz
 		}
 }
 
-void swapfun(Coef** eqmat, int neq, int ncoef, int contpivo) // esta funÁ„o È respons·vel por realizar o "swap", ou a troca entre a posiÁ„o das linhas da matriz conforme
+void swapfun(Coef** eqmat, int neq, int ncoef, int contpivo) // esta fun√ß√£o √© respons√°vel por realizar o "swap", ou a troca entre a posi√ß√£o das linhas da matriz conforme
 {		                                                     // a necessidade durante o processo de escalonamento
 	Coef structaux;
 			if(eqmat[contpivo][contpivo].num == 0)
@@ -139,23 +139,23 @@ void swapfun(Coef** eqmat, int neq, int ncoef, int contpivo) // esta funÁ„o È re
 				}
 }
 
-long int funmdc(int a, int b) // esta funÁ„o calcula o MDC entre dois n˙meros de forma recursiva, para posteriormente encontrar o MMC, ˙til no processo
-{				              // de escalonamento, na etapa da subtraÁ„o entre duas equaÁıes
+long int funmdc(int a, int b) // esta fun√ß√£o calcula o MDC entre dois n√∫meros de forma recursiva, para posteriormente encontrar o MMC, √∫til no processo
+{				              // de escalonamento, na etapa da subtra√ß√£o entre duas equa√ß√µes
 	if (b == 0) return a;
 	return funmdc(a, (b % a));
 }
-long int funmmc(int mdc, int a, int b) // esta funÁ„o utiliza o valor do MDC calculado anteriormente para encontrar o MMC, usado
+long int funmmc(int mdc, int a, int b) // esta fun√ß√£o utiliza o valor do MDC calculado anteriormente para encontrar o MMC, usado
 {	                                   // no escalonamento
 	long int mmc;
 	mmc = (a * b)/mdc;
 	return mmc;
 }
 
-void escalonamento(Coef** eqmat, int neq, int ncoef, int cont) // esta funÁ„o recursiva chama a funÁ„o swap quando necess·rio e efetua o processo
-{                                                              // de subtraÁ„o entre duas equaÁıes, multiplicando uma por um fator e chamando o valor
-	if (cont == (neq - 1) || cont == (ncoef - 1)) return;      // do MMC para fazer com que se zere o primeiro coeficiente da equaÁ„o alvo. … chamada
-	else                                                       // de forma recursiva atÈ que se chegue ao caso base em que o pivÙ est· na ˙ltima linha da matriz
-	{                                                          // ou na pen˙ltima coluna
+void escalonamento(Coef** eqmat, int neq, int ncoef, int cont) // esta fun√ß√£o recursiva chama a fun√ß√£o swap quando necess√°rio e efetua o processo
+{                                                              // de subtra√ß√£o entre duas equa√ß√µes, multiplicando uma por um fator e chamando o valor
+	if (cont == (neq - 1) || cont == (ncoef - 1)) return;      // do MMC para fazer com que se zere o primeiro coeficiente da equa√ß√£o alvo. √â chamada
+	else                                                       // de forma recursiva at√© que se chegue ao caso base em que o piv√¥ est√° na √∫ltima linha da matriz
+	{                                                          // ou na pen√∫ltima coluna
 		swapfun(eqmat, neq, ncoef, cont);
 		Coef lambda, aux;
 		int mmc, mdc;
@@ -197,9 +197,9 @@ void escalonamento(Coef** eqmat, int neq, int ncoef, int cont) // esta funÁ„o re
 	}
 }
 
-int verificacolisao(Coef** eqmat, int neq, int ncoef) // esta funÁ„o desempenha o papel de checar inconsistÍncias matem·ticas na matriz final escalonada,
-{                                                     // a fim de verificar se o sistema permite ou n„o a colis„o entre os dois objetos em estudo.
-	for(int i = 0; i < neq; i++)                      // A funÁ„o retorna 1 caso n„o haja colis„o e retorna 0 quando h·
+int verificacolisao(Coef** eqmat, int neq, int ncoef) // esta fun√ß√£o desempenha o papel de checar inconsist√™ncias matem√°ticas na matriz final escalonada,
+{                                                     // a fim de verificar se o sistema permite ou n√£o a colis√£o entre os dois objetos em estudo.
+	for(int i = 0; i < neq; i++)                      // A fun√ß√£o retorna 1 caso n√£o haja colis√£o e retorna 0 quando h√°
 		{
 			if (eqmat[i][0].num == 0 && eqmat[i][1].num == 0 && eqmat[i][2].num == 0 && eqmat[i][3].num != 0) return 1;
 		}
@@ -211,8 +211,8 @@ int main (int argc, char* argv[])
     int neq, ncoef;
     int colisao;
 
-    scanf("%d", &neq); // aqui escaneamos o n˙mero de equaÁıes da matriz
-    scanf("%d", &ncoef); // aqui escaneamos o n˙mero de coeficientes de cada equaÁ„o
+    scanf("%d", &neq); // aqui escaneamos o n√∫mero de equa√ß√µes da matriz
+    scanf("%d", &ncoef); // aqui escaneamos o n√∫mero de coeficientes de cada equa√ß√£o
 
 	Coef** eqmat = (Coef**) malloc(sizeof(Coef*) * neq);
     for(int i = 0; i < neq; i++)
@@ -220,14 +220,14 @@ int main (int argc, char* argv[])
 			eqmat[i] = (Coef*) malloc(sizeof(Coef) * ncoef);
         }
 
-    eqmat = scaneq(eqmat, neq, ncoef); // chamamos a funÁ„o que ler· os inouts dos objetos a serem trabalhados
+    eqmat = scaneq(eqmat, neq, ncoef); // chamamos a fun√ß√£o que ler√° os inouts dos objetos a serem trabalhados
 
-	escalonamento(eqmat, neq, ncoef, 0); // chamamos a importante funÁ„o de escalonamento que preparar· a matriz para verificar enfim a colis„o
-                                         // dos objetos. Dentro desta funÁ„o chama-se a funÁ„o swap, a que calcula o MDC e a que calcula o MMC.
+	escalonamento(eqmat, neq, ncoef, 0); // chamamos a importante fun√ß√£o de escalonamento que preparar√° a matriz para verificar enfim a colis√£o
+                                         // dos objetos. Dentro desta fun√ß√£o chama-se a fun√ß√£o swap, a que calcula o MDC e a que calcula o MMC.
 
-	colisao = verificacolisao(eqmat, neq, ncoef); // Aqui verificamos se h· colis„o
+	colisao = verificacolisao(eqmat, neq, ncoef); // Aqui verificamos se h√° colis√£o
 
-	if (colisao == 1) printf("nao\n"); //imprimimos conforme o resultado da funÁ„o
+	if (colisao == 1) printf("nao\n"); //imprimimos conforme o resultado da fun√ß√£o
 	else printf("sim\n");
 
 	imprimematriz(eqmat, neq, ncoef); // imprimimos a matriz escalonada, formatada e simplificada
