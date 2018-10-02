@@ -46,9 +46,12 @@ void insert_word(char word[], NODE* root){
 		pos = word[i] - 'a'; /*pos será um número entre 0 e 25 que representa uma letra do alfabeto*/
 		//printf("value of letter '%c' is %d\n", word[i], pos);
 		if (aux->kid[pos] == NULL) aux->kid[pos] = create_node(aux);
+		if (i == len-1){
+			aux->kid[pos]->end = 1;
+			break;
+		} 
 		aux = aux->kid[pos];
 	}
-	if (aux != root) aux->end = 1;
 }
 /*enquanto o arquivo não acabar, nós leremos todo conjunto de caracteres
   encontrado até um diferente de a - Z como string e a chamamos de 'word'. Em seguida,
@@ -76,7 +79,12 @@ NODE* read_book(void){
 	fclose(fp);
 	return root;
 }
-
+/*Aqui nós verificamos individualmente as palavras do tweet e a comparamos com a Trie já existente,
+  com o auxílio de um nó 'aux'. Se uma palavra não for encontrada ou o seu fim não corresponder ao fim
+  de uma parte da Trie dicionário a palavra recebida pela função é impressa, seguida de espaço.
+  ----------------------------------------------------------------------------------------------------
+  A função recebe como parâmetros a palavra a ser verificada 'tword' e o nó raiz da Trie.
+  Não há retorno.*/
 void check_and_print_error(char* tword, NODE* root){
 	NODE* aux = root;
 	int len = strlen(tword);
@@ -90,14 +98,23 @@ void check_and_print_error(char* tword, NODE* root){
             printf("%s ", tword);
             break;
         }
-        if (i == (len-1) && aux->end == 1){
+        else if (i == (len-1) && aux->kid[pos]->end != 1){
             printf("%s ", tword);
             break;
         }
         aux = aux->kid[pos];
 	}
 }
-
+/*A função a seguir tem o papel de ler o nome do arquivo de tweets pela stdin, abri-lo
+  e iniciar a leitura do json. Assim que for identificado o trecho de texto < "text": >, a função
+  guarda em uma string todo o corpo do texto do tweet, até o próximo caracter < " >, e em seguida
+  utilizamos strtok para separar todas as palavras válidas em strings menores iterativamente.
+  Caso não se encontre o trecho de texto que identifica o início do texto de um tweet, imprime-se
+  uma mensagem de erro.
+  A cada palavra lida, é chamada a função 'check_and_print_error' para verificar se esta palavra
+  é encontrada na trie que serve de dicionário e imprimi-la caso não seja.
+  ------------------------------------------------------------------------------------------------
+  É recebido como parâmetro apenas o nó raiz da trie, e não há retorno.*/
 void read_tweets(NODE* root){
 	char jsonname[512];
 	scanf("%s", jsonname);
@@ -116,22 +133,36 @@ void read_tweets(NODE* root){
 			fscanf(ft, " \"");
 			fscanf(ft, " %[^\"]", tweet);
 			//printf("%s\n", tweet);
-			char* tword = strtok(tweet, ".,!?\"\n&... ’’;@-“”#—1234567890+=*:");
+			char* tword = strtok(tweet, ".,!?\"\n&… '’;@-“”#—1234567890+=*:()[]");
 			while(tword != NULL){
 				//printf("the word to be checked is '%s'\n", tword);
 				check_and_print_error(tword, root);
 				if(tword == NULL) break;
-                tword = strtok(NULL, ".,!?\"\n&... ’’;@-“”#—1234567890+=*:");
+                tword = strtok(NULL, ".,!?\"\n&… '’;@-“”#—1234567890+=*:()[]");
 			}
 			printf("\n");
 		}
 	}
+	fclose(ft);
 	if (tweetexists != 1) printf("No tweets to check\n");
+}
+
+/*Essa função recursiva será responsável por liberar a memória alocada em toda a estrutura Trie implementada.
+  Dentro da função há um loop que verifica se todos os ponteiros para nós filhos do nó atual são nulos, se não são,
+  a função é chamada novamente para cada um deles, se o nó atual não tem filhos, o liberamos e retornamos a função.
+  -----------------------------------------------------------------------------------------------------------------
+  É recebido como parâmetro nó NODE* node (na primeira chamada este é o nó-raiz) e não há retorno para a main.*/
+void freetrie(NODE* node){
+	for(int i = 0; i < 26; i++){
+		if(node->kid[i] != NULL) freetrie(node->kid[i]);
+	}
+	free(node);
+	return;
 }
 int main(int argc, char* argv[]){
 	NODE* root = NULL;
 	root = read_book();
 	read_tweets(root);
-	//FREE
+	freetrie(root);
 	return 0;
 }
