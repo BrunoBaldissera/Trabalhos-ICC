@@ -92,7 +92,7 @@ void read_tweets(NODE* root){
 	char findtxt[512];
 	char tweet[281];
 	char tword[281];
-	int len = 0, count = 0;
+	int len = 0, count = 0, lenaux = 0;
 	while(!feof(ft)){	
 		fscanf(ft, "%s", findtxt);
 		if (strncmp(findtxt, "\"text\":", 7) == 0){
@@ -103,6 +103,7 @@ void read_tweets(NODE* root){
 			len = strlen(tweet);
 			while(count < len){
 				sscanf(tweet, "%[a-zA-Z]%*[^a-zA-Z]", tword);
+				lenaux = strlen(tword);
 				printf("the tweet word is '%s'\n", tword);
 				//check_and_print_error(tword, root);
 				count++;
