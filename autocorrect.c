@@ -87,11 +87,11 @@ void check_and_print_error(char* tword, NODE* root){
         lowerword[i] = tolower(lowerword[i]);
         pos = lowerword[i] - 'a';
         if (aux->kid[pos] == NULL){
-            printf("ERROR: %s \n", tword);
+            printf("%s ", tword);
             break;
         }
         if (i == (len-1) && aux->end == 1){
-            printf("ERROR %s \n", tword);
+            printf("%s ", tword);
             break;
         }
         aux = aux->kid[pos];
@@ -101,28 +101,32 @@ void check_and_print_error(char* tword, NODE* root){
 void read_tweets(NODE* root){
 	char jsonname[512];
 	scanf("%s", jsonname);
-	printf("json name read: %s\n", jsonname);
+	//printf("json name read: %s\n", jsonname);
 	FILE* ft;
 	ft = fopen(jsonname, "r");
-	printf("tweet file opened\n");
+	//printf("tweet file opened\n");
 	char findtxt[512];
 	char tweet[281];
+	short int tweetexists = 0;
 	while(!feof(ft)){
 		fscanf(ft, "%s", findtxt);
 		if (strncmp(findtxt, "\"text\":", 7) == 0){
-			printf("text was found: %s\n", findtxt);
+			//printf("text was found: %s\n", findtxt);
+			tweetexists = 1;
 			fscanf(ft, " \"");
 			fscanf(ft, " %[^\"]", tweet);
-			printf("%s\n", tweet);
-			char* tword = strtok(tweet, ".,!?\"\n&... ’’;@-“”#");
+			//printf("%s\n", tweet);
+			char* tword = strtok(tweet, ".,!?\"\n&... ’’;@-“”#—1234567890+=*:");
 			while(tword != NULL){
-                tword = strtok(NULL, ".,!?\"\n&... ’’;@-“”#");
-                printf("the tokenized word was '%s'\n", tword);
+				//printf("the word to be checked is '%s'\n", tword);
 				check_and_print_error(tword, root);
+				if(tword == NULL) break;
+                tword = strtok(NULL, ".,!?\"\n&... ’’;@-“”#—1234567890+=*:");
 			}
 			printf("\n");
 		}
 	}
+	if (tweetexists != 1) printf("No tweets to check\n");
 }
 int main(int argc, char* argv[]){
 	NODE* root = NULL;
