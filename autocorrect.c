@@ -36,12 +36,15 @@ NODE* create_node(NODE* n){
   nó raíz da trie. Não se retorna nada.*/
 
 void insert_word(char word[], NODE* root){
+	//printf("insert word function called\n");
 	NODE* aux = root;
 	int len = strlen(word);
+	//printf("length of '%s' = %d\n", word, len);
 	int pos = 0;
 	for(int i = 0; i < len; i++){
 		word[i] = tolower(word[i]); /*trataremos todas as letras como caracteres minúsculos*/
 		pos = word[i] - 'a'; /*pos será um número entre 0 e 25 que representa uma letra do alfabeto*/
+		//printf("value of letter '%c' is %d\n", word[i], pos);
 		if (aux->kid[pos] == NULL) aux->kid[pos] = create_node(aux);
 		aux = aux->kid[pos];
 	}
@@ -56,50 +59,62 @@ void insert_word(char word[], NODE* root){
 NODE* read_book(void){
 	NODE* root = NULL;
 	root = create_node(root);
+	//printf("root node created\n");
 	char filename[512];
 	scanf("%s", filename);
+	//printf("filename read: %s\n", filename);
 	FILE* fp;
 	fp = fopen(filename, "r");
+	//printf("book file opened\n");
 	char word[46];
 	
 	while(!feof(fp)){
-		fscanf(fp, "%s[a-zA-Z]", word);
+		fscanf(fp, "%[a-zA-Z]%*[^a-zA-Z]", word);
+		//printf("word scanned: %s\n", word);
 		insert_word(word, root);
 	}
 	fclose(fp);
 	return root;
 }
 
-void check_and_print_error(char tword[]){
+void check_and_print_error(char tword[], NODE* root){
 	//verifica se a palavra atual existe na trie
 	//se não existir, imprime a palavra do próprio tweet seguida de espaço
 }
 
-void read_tweets(void){
+void read_tweets(NODE* root){
 	char jsonname[512];
 	scanf("%s", jsonname);
+	printf("json name read: %s\n", jsonname);
 	FILE* ft;
 	ft = fopen(jsonname, "r");
+	printf("tweet file opened\n");
 	char findtxt[512];
+	char tweet[281];
 	char tword[281];
+	int len = 0, count = 0;
 	while(!feof(ft)){	
 		fscanf(ft, "%s", findtxt);
 		if (strncmp(findtxt, "\"text\":", 7) == 0){
+			printf("text was found: %s\n", findtxt);
 			fscanf(ft, " \"");
-			while(/*condição de parada da parte 'text' de um tweet*/){
-				fscanf(ft, "%s[a-zA-Z]", tword);
-				check_and_print_error(tword);
+			fscanf(ft, " %[^\"]", tweet);
+			printf("%s\n", tweet);
+			len = strlen(tweet);
+			while(count < len){
+				sscanf(tweet, "%[a-zA-Z]%*[^a-zA-Z]", tword);
+				printf("the tweet word is '%s'\n", tword);
+				//check_and_print_error(tword, root);
+				count++;
 			}
-			printf("\n");
-		}
+			printf("\n");				
+		}	
 	}
 }
 int main(int argc, char* argv[]){
-	
 	NODE* root = NULL;
 	root = read_book();
-	read_tweets();
-	
+	read_tweets(root);
 	//FREE
 	return 0;
 }
