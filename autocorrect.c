@@ -114,9 +114,9 @@ void read_tweets(NODE* root){
 			fscanf(ft, " \"");
 			fscanf(ft, " %[^\"]", tweet);
 			printf("%s\n", tweet);
-			char* tword = strtok(tweet, "\t\r\n\v\f\b.,!?\"\n&...’’;@-“”#");
+			char* tword = strtok(tweet, ".,!?\"\n&... ’’;@-“”#");
 			while(tword != NULL){
-                tword = strtok(NULL, ".,!?\"\n&...’’;@-“”#");
+                tword = strtok(NULL, ".,!?\"\n&... ’’;@-“”#");
                 printf("the tokenized word was '%s'\n", tword);
 				check_and_print_error(tword, root);
 			}
