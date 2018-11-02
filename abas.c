@@ -3,27 +3,32 @@
 #include <string.h>
 
 typedef struct{
-  int mes;
-  int dia;
+	int mes;
+	int dia;
+	int hora;
+	int minuto;
 }Data;
 
 typedef struct{
-  char titulo[32];
-  char url[1024];
-  Data data;
-  int hora;
+	char titulo[32];
+	char url[1024];
+	Data* data;
+	int hora;
 }Aba;
 
-//Falta a struct NO
+typedef struct no{
+	struct no* prox;
+	Aba* aba;
+}No;
 
 typedef struct{
-  No inicio;
-  // No fim;
-  No tam;
+	No* cabeca;
+	No* fim;
+	int tam;
 }Lista;
   
 void abrir(){
-
+	
 }
 
 void alterar(){
@@ -39,27 +44,27 @@ void exibir(){
 }
 
 void sair(){
-
+	//free;
 }
 
 int main(int argc, char* argv[]){
-   do{
-     scanf("%d", &escolha);
-     switch (escolha){
-      case 1:
-	abrir();
-	break;
-      case 2:
-	alterar();
-	break;
-      case 3:
-	ordenar();
-	break;
-      case 4:
-	exibir();
-     }
-   }while(escolha != 5);
-   sair();
-
+	int escolha;
+	do{
+		scanf("%d", &escolha);
+		switch (escolha){
+			case 1:
+				abrir();
+				break;
+			case 2:
+				alterar();
+				break;
+			case 3:
+				ordenar();
+				break;
+			case 4:
+				exibir();
+		 }
+	}while(escolha != 5);
+	sair();
 return 0;
 }
