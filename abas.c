@@ -18,6 +18,7 @@ typedef struct{
 
 typedef struct no{
 	struct no* prox;
+	struct no* ante;
 	Aba* aba;
 }No;
 
@@ -28,7 +29,11 @@ typedef struct{
 }Lista;
   
 void abrir(){
-	
+	No* novo = (No*) malloc(sizeof(No));
+	scanf("%");
+	scanf("");
+	scanf("");
+	scanf("");
 }
 
 void alterar(){
