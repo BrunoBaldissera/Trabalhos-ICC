@@ -15,7 +15,6 @@ typedef struct{
 	char titulo[32];
 	char url[1024];
 	Data data;
-	//int pos;
 }Aba;
 
 typedef struct no{
@@ -60,7 +59,7 @@ void abrir(Lista* L){
 	if (DEBUG) printf ("operação de abrir nova aba finalizada\n");
 }
 
-void alterar(Lista* L){
+int alterar(Lista* L){
 	if (DEBUG) printf ("função \"alterar\" inicializada\n");
 	char ver_titulo[32];
 	scanf("%[^\n]%*c", ver_titulo);
@@ -69,11 +68,30 @@ void alterar(Lista* L){
 	scanf("%d", &nova_pos);
 	if (DEBUG) printf ("a nova posição é \"%d\"\n", nova_pos); 
 	
-	No* aux = L->cabeca->prox;
-	while (aux->aba.titulo != ver_titulo && aux != NULL){
-		aux = aux->prox;
-		pos_atual++;
+	No* aux_ant = L->cabeca;
+	No* aux;
+	No* aux_destino;
+	
+	while (aux_ant->prox->aba.titulo != ver_titulo){
+		if (aux_ant == NULL) return 1;
+		if (pos_atual == nova_pos) aux_destino = aux_ant->prox;
+		aux_ant = aux_ant->prox;
+	    pos_atual++;
 	}
+	aux = aux_ant->prox;
+	
+	if (pos_atual < nova_pos){
+		aux_destino = aux;
+		while (pos_atual != nova_pos){
+			aux_destino = aux_destino->prox;
+		}
+	}
+	//TRATAR CASOS ESPECIAIS (destino = aux, destino = ultimo no, destino = primeiro no, aux = ultimo no, aux = primeiro no...)
+	aux_ant->prox = aux->prox;
+	aux->prox = aux_destino->prox;
+	aux_destino->prox = aux;
+	
+	return 0;
 }
 
 void ordenar(Lista* L){
@@ -81,7 +99,6 @@ void ordenar(Lista* L){
 }
 
 void exibir(Lista* L){
-	if (DEBUG) printf ("função \"exibir\" inicializada\n");
 	No* aux = L->cabeca->prox;
 	while (aux != NULL){
 		printf("%s %s %d/%d %d/%d\n", aux->aba.titulo, aux->aba.url, aux->aba.data.dia, aux->aba.data.mes, aux->aba.data.hora, aux->aba.data.minuto);
