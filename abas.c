@@ -15,7 +15,7 @@ typedef struct{
 	char titulo[32];
 	char url[1024];
 	Data data;
-	int pos;
+	//int pos;
 }Aba;
 
 typedef struct no{
@@ -56,23 +56,42 @@ void abrir(Lista* L){
 	novo->prox = NULL;
 	L->fim = novo;
 	(L->tam)++;
+	//novo->aba.pos = L->tam;
 	if (DEBUG) printf ("operação de abrir nova aba finalizada\n");
 }
 
 void alterar(Lista* L){
-	if (DEBUG) printf ("função \"alterar\" chamada\n");
+	if (DEBUG) printf ("função \"alterar\" inicializada\n");
+	char ver_titulo[32];
+	scanf("%[^\n]%*c", ver_titulo);
+	if (DEBUG) printf ("o novo titulo é \"%s\"\n", ver_titulo); 
+	int nova_pos, pos_atual = 1;
+	scanf("%d", &nova_pos);
+	if (DEBUG) printf ("a nova posição é \"%d\"\n", nova_pos); 
+	
+	No* aux = L->cabeca->prox;
+	while (aux->aba.titulo != ver_titulo && aux != NULL){
+		aux = aux->prox;
+		pos_atual++;
+	}
 }
 
 void ordenar(Lista* L){
-	if (DEBUG) printf ("função \"ordenar\" chamada\n");
+	if (DEBUG) printf ("função \"ordenar\" inicializada\n");
 }
 
 void exibir(Lista* L){
-	if (DEBUG) printf ("função \"exibir\" chamada\n");
+	if (DEBUG) printf ("função \"exibir\" inicializada\n");
+	No* aux = L->cabeca->prox;
+	while (aux != NULL){
+		printf("%s %s %d/%d %d/%d\n", aux->aba.titulo, aux->aba.url, aux->aba.data.dia, aux->aba.data.mes, aux->aba.data.hora, aux->aba.data.minuto);
+		aux = aux->prox;
+	}
+	printf("\n");
 }
 
 void sair(Lista* L){
-	if (DEBUG) printf ("função \"sair\" chamada\n");
+	if (DEBUG) printf ("função \"sair\" inicializada\n");
 	//free;
 }
 
