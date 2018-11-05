@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DEBUG 1
+#define DEBUG 0
 
 typedef struct{
 	int mes;
@@ -19,6 +19,7 @@ typedef struct{
 
 typedef struct no{
 	struct no* prox;
+        struct no* ant;
 	Aba aba;
 }No;
 
@@ -31,6 +32,7 @@ typedef struct{
 No* cria_no(void){
 	No* n = (No*) malloc(sizeof(No));
 	n->prox = NULL;
+	n->ant = NULL;
 	return n;
 }  
 
@@ -50,48 +52,77 @@ void abrir(Lista* L){
 	scanf("%[^\n]%*c", novo->aba.url);
 	scanf("%d %d", &novo->aba.data.dia, &novo->aba.data.mes);
 	scanf("%d %d", &novo->aba.data.hora, &novo->aba.data.minuto);
-	
+
+	novo->ant = L->fim;
 	L->fim->prox = novo;
 	novo->prox = NULL;
 	L->fim = novo;
 	(L->tam)++;
-	//novo->aba.pos = L->tam;
-	if (DEBUG) printf ("operação de abrir nova aba finalizada\n");
 }
 
 int alterar(Lista* L){
-	if (DEBUG) printf ("função \"alterar\" inicializada\n");
 	char ver_titulo[32];
 	scanf("%[^\n]%*c", ver_titulo);
-	if (DEBUG) printf ("o novo titulo é \"%s\"\n", ver_titulo); 
+	if (DEBUG) printf ("o titulo é \"%s\"\n", ver_titulo); 
 	int nova_pos, pos_atual = 1;
 	scanf("%d", &nova_pos);
-	if (DEBUG) printf ("a nova posição é \"%d\"\n", nova_pos); 
+	if (DEBUG) printf ("a nova posição é \"%d\"\n", nova_pos);
+	int melhor_caso = 0;
 	
-	No* aux_ant = L->cabeca;
-	No* aux;
+	No* aux = L->cabeca->prox;
 	No* aux_destino;
-	
-	while (aux_ant->prox->aba.titulo != ver_titulo){
-		if (aux_ant == NULL) return 1;
-		if (pos_atual == nova_pos) aux_destino = aux_ant->prox;
-		aux_ant = aux_ant->prox;
-	    pos_atual++;
+
+	while (strcmp(aux->aba.titulo, ver_titulo) != 0){
+		if (pos_atual == L->tam) return 0;
+		if (pos_atual == nova_pos){
+	    		aux_destino = aux;
+	    		melhor_caso = 1;
+	  	}
+		aux = aux->prox;
+		pos_atual++;
 	}
-	aux = aux_ant->prox;
-	
-	if (pos_atual < nova_pos){
+	if (nova_pos >= L->tam){
+		aux->ant->prox = aux->prox;
+		aux->prox->ant = aux->ant;
+		aux->prox = NULL;
+		aux->ant = L->fim;
+		L->fim->prox = aux;
+		L->fim = aux;
+		return 1;
+	}
+	if (melhor_caso == 1){
+	        if (pos_atual == L->tam){
+			L->fim = aux->ant;
+			aux->ant->prox =aux->prox;
+			aux->prox = aux_destino;
+			aux->ant = aux_destino->ant;
+			aux_destino->ant->prox = aux;
+			aux_destino->ant = aux;
+			return 2;
+		}	
+		aux->ant->prox = aux->prox;	
+		aux->prox->ant = aux->ant;
+		aux->prox = aux_destino;
+		aux->ant = aux_destino->ant;
+		aux_destino->ant->prox = aux;
+		aux_destino->ant = aux;
+		return 2;
+	}
+	if (nova_pos > pos_atual){
 		aux_destino = aux;
 		while (pos_atual != nova_pos){
 			aux_destino = aux_destino->prox;
+			pos_atual++;
 		}
+		aux->ant->prox = aux->prox;
+		aux->prox->ant = aux->ant;
+		aux->prox = aux_destino->prox;
+		aux->ant = aux_destino;
+		aux_destino->prox->ant = aux;
+		aux_destino->prox = aux;
+		return 3;
 	}
-	//TRATAR CASOS ESPECIAIS (destino = aux, destino = ultimo no, destino = primeiro no, aux = ultimo no, aux = primeiro no...)
-	aux_ant->prox = aux->prox;
-	aux->prox = aux_destino->prox;
-	aux_destino->prox = aux;
-	
-	return 0;
+	return 4;
 }
 
 void ordenar(Lista* L){
@@ -100,8 +131,8 @@ void ordenar(Lista* L){
 
 void exibir(Lista* L){
 	No* aux = L->cabeca->prox;
-	while (aux != NULL){
-		printf("%s %s %d/%d %d/%d\n", aux->aba.titulo, aux->aba.url, aux->aba.data.dia, aux->aba.data.mes, aux->aba.data.hora, aux->aba.data.minuto);
+	for (int i = 0; i < L->tam; i++){
+		printf("%s %s %02d/%02d %02d:%02d\n", aux->aba.titulo, aux->aba.url, aux->aba.data.dia, aux->aba.data.mes, aux->aba.data.hora, aux->aba.data.minuto);
 		aux = aux->prox;
 	}
 	printf("\n");
